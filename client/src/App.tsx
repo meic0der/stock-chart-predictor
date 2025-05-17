@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import StockForm from "./components/StockForm";
 import StockChart from "./components/StockChart";
 import HistoryList from "./components/HistoryList";
