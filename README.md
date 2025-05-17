@@ -1,5 +1,5 @@
 # stock-chart-predictor
-📈 株価予測アプリ
+##　📈 株価予測アプリ
 このアプリは、指定した銘柄の過去データをもとに 機械学習による株価予測 を行い、チャート表示・履歴保存・モデル切替ができる Web アプリです。
 
 '''
@@ -10,7 +10,7 @@ stock-chart-predictor/
 └── README.md
 '''
 
-🖥 使用技術
+## 🖥 使用技術
 機能	技術スタック
 フロントエンド	React, TypeScript, Recharts
 バックエンド	Node.js, Express, Knex.js, PostgreSQL
