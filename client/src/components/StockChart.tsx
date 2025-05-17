@@ -57,19 +57,23 @@ const StockChart: React.FC<Props> = ({ data }) => {
   const chartData = [...actualPoints, ...predictedPoints];
 
   return (
-    <div style={{ width: '100%', height: 420 }}>
+    <div style={{ width: "100%", height: 420 }}>
       {/* 企業情報（ある場合のみ表示） */}
       {company && (
-        <div style={{ marginBottom: '0.5rem' }}>
-          <strong>{company.name}</strong>（{company.exchange} / {company.currency}）
+        <div style={{ marginBottom: "0.5rem" }}>
+          <strong>{company.name}</strong>（{company.exchange} /{" "}
+          {company.currency}）
         </div>
       )}
 
       {/* 移動平均の期間切り替えセレクト */}
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: "1rem" }}>
         <label>
-          移動平均期間:{' '}
-          <select value={smaPeriod} onChange={(e) => setSmaPeriod(Number(e.target.value))}>
+          移動平均期間:{" "}
+          <select
+            value={smaPeriod}
+            onChange={(e) => setSmaPeriod(Number(e.target.value))}
+          >
             <option value={3}>3日</option>
             <option value={5}>5日</option>
             <option value={7}>7日</option>
@@ -78,14 +82,34 @@ const StockChart: React.FC<Props> = ({ data }) => {
       </div>
 
       {/* 実データ・予測・SMAの3本線チャート */}
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={350}>
         <LineChart data={chartData}>
           <CartesianGrid stroke="#ccc" />
-          <XAxis dataKey="date" />
+          <XAxis
+            dataKey="date"
+            // tickFormatter={(tick, index) => {
+            //   // データが多いときは間引き（例：1年は7日ごと）
+            //   const skip =
+            //     chartData.length > 250 ? 14 : chartData.length > 100 ? 3 : 1;
+            //   return index % skip === 0 ? tick : "";
+            // }}
+            // minTickGap={10} // 最小の間隔（ピクセル）
+            // interval="preserveStartEnd" // 開始と終了は常に表示
+          />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="actual" stroke="#8884d8" name="実データ" />
-          <Line type="monotone" dataKey="predicted" stroke="#82ca9d" name="予測" />
+          <Line
+            type="monotone"
+            dataKey="actual"
+            stroke="#8884d8"
+            name="実データ"
+          />
+          <Line
+            type="monotone"
+            dataKey="predicted"
+            stroke="#82ca9d"
+            name="予測"
+          />
           <Line
             type="monotone"
             dataKey="sma"

@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# React build
+client/dist/
+
+# Python 仮想環境
+ml-api/.venv/
+
+# Python キャッシュ
+__pycache__/
+*.pyc
+
+# Editor directories and files
+.vscode/
+.DS_Store
+
+# 環境変数ファイルをGitに含めない
+client/.env
+server/.env
+ml-api/.env

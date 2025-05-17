@@ -3,13 +3,27 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const yahooFinance = require("yahoo-finance2").default;
+const axios = require("axios");
 
 router.post("/predict", async (req, res) => {
-  const { symbol, range = "1w" } = req.body; //rangeがundefindのとき初期値は1W
+  const { symbol, range = "1w", model = "model1"  } = req.body; //rangeがundefindのとき初期値は1W
   if (!symbol) return res.status(400).json({ error: "symbolは必須です" });
 
   try {
-    const days = range === "1m" ? 30 : 7;
+    let days;
+    switch (range) {
+      case "1m":
+        days = 30;
+        break;
+      case "1y":
+        days = 365;
+        break;
+      case "3y":
+        days = 365 * 3;
+        break;
+      default:
+        days = 7; // '1w'
+    }
     const now = new Date();
     const from = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
 
@@ -55,7 +69,7 @@ router.post("/predict", async (req, res) => {
     // 📅 日付 + 株価の整形
     const result = quotes.map((quote) => ({
       date: quote.date,
-      close: quote.close,
+      close: quote.close ?? null,
     }));
 
     //終値ぬきだし
@@ -75,10 +89,23 @@ router.post("/predict", async (req, res) => {
 
     // 簡単な予測：最後の値から毎日+1%の成長
     const lastPrice = closes[closes.length - 1];
-    //長さ7の空配列 [undefined, undefined, ..., undefined]つくり、各要素に対して (_, i) => {...} を実行（iは0〜6）
-    const predicted = Array.from({ length: 7 }, (_, i) =>
-      Math.round(lastPrice * Math.pow(1.01, i + 1))
-    );
+
+    // Flask APIを使った予測
+    let predicted;
+    if (model !== "model1") {
+      const mlRes = await axios.post("http://localhost:5000/predict", {
+        prev_close: lastPrice, // 直近の終値
+        return: 0.01,  // 成長率
+        model: model,
+      });
+      predicted = mlRes.data.predicted;
+    } else {
+      //長さ7の空配列 [undefined, undefined, ..., undefined]つくり、各要素に対して (_, i) => {...} を実行（iは0〜6）
+      predicted = Array.from({ length: 7 }, (_, i) =>
+        Math.round(lastPrice * Math.pow(1.01, i + 1))
+      );
+    }
+
 
     const predictedDates = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
@@ -113,7 +140,6 @@ router.post("/predict", async (req, res) => {
       exchange: info.fullExchangeName || null,
       currency: info.currency || null,
     };
-    console.log("👀 company before insert:", JSON.stringify(company));
     // DB保存（アップサート）
     await db("histories")
       .insert({
@@ -122,7 +148,7 @@ router.post("/predict", async (req, res) => {
         actualDates,
         predicted,
         predictedDates,
-        company: JSON.stringify(company), 
+        company: JSON.stringify(company),
         created_at: new Date(),
         user_id: 1,
         note: "",
