@@ -2,8 +2,8 @@
 // client/src/services/stockApi.ts
 import axios from 'axios';
 
-// const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-const API_BASE_URL ="https://stock-chart-predictor.onrender.com"
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+// const API_BASE_URL ="https://stock-chart-predictor.onrender.com"
 
 // const ML_API_BASE_URL = import.meta.env.VITE_ML_API_URL || 'http://localhost:5000';
 
