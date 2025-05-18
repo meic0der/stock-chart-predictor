@@ -9,7 +9,10 @@ import numpy as np
 
 
 app = Flask(__name__) #Flask サーバーを生成
-CORS(app)  # CORSを有効にする 他のポート（Reactなど）からのアクセスを許可する
+CORS(app, origins=[
+    "http://localhost:4000",   # ローカル開発用
+    "https://stock-api.onrender.com"  # 本番
+])# CORSを有効にする 他のポート（Reactなど）からのアクセスを許可する
 
 # モデルの読み込み
 model2 = joblib.load('models/model2.pkl')

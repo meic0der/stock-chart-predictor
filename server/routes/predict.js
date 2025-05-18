@@ -90,10 +90,13 @@ router.post("/predict", async (req, res) => {
     // 簡単な予測：最後の値から毎日+1%の成長
     const lastPrice = closes[closes.length - 1];
 
+    
     // Flask APIを使った予測
+    const ML_API_URL = process.env.ML_API_URL || 'http://localhost:5000'; 
+
     let predicted;
     if (model !== "model1") {
-      const mlRes = await axios.post("http://localhost:5000/predict", {
+      const mlRes = await axios.post(`${ML_API_URL}/predict`, {
         prev_close: lastPrice, // 直近の終値
         return: 0.01,  // 成長率
         model: model,
