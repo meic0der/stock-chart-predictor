@@ -27,7 +27,7 @@ const StockForm: React.FC<Props> = ({ onResult }) => {
     setRange(e.target.value as "1w" | "1m" | "1y" | "3y");
   };
 
-   // モデル変更時の処理
+  // モデル変更時の処理
   const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setModel(e.target.value);
   };
@@ -74,9 +74,21 @@ const StockForm: React.FC<Props> = ({ onResult }) => {
       <label style={{ marginLeft: "1rem" }}>
         モデル:
         <select value={model} onChange={handleModelChange}>
-          <option value="model1">モデル1（単純成長）</option>
-          <option value="model2">モデル2（ML: SVR）</option>
-          <option value="model3">モデル3（ML: XGBoost）</option>
+          <option value="model1" title="単純な1%成長モデル（統計なし）">
+            モデル1（単純成長）
+          </option>
+          <option
+            value="model2"
+            title="Support Vector Regression（SVR）を使った機械学習モデル"
+          >
+            モデル2（ML: SVR）
+          </option>
+          <option
+            value="model3"
+            title="XGBoostを使ったより高精度な機械学習モデル"
+          >
+            モデル3（ML: XGBoost）
+          </option>
         </select>
       </label>
 

@@ -6,9 +6,8 @@ const yahooFinance = require("yahoo-finance2").default;
 const axios = require("axios");
 
 router.post("/predict", async (req, res) => {
-  const { symbol, range = "1w", model = "model1"  } = req.body; //rangeがundefindのとき初期値は1W
+  const { symbol, range = "1w", model = "model1" } = req.body; //rangeがundefindのとき初期値は1W
   if (!symbol) return res.status(400).json({ error: "symbolは必須です" });
-
   try {
     let days;
     switch (range) {
@@ -73,9 +72,9 @@ router.post("/predict", async (req, res) => {
     }));
 
     //終値ぬきだし
-    const closes = result.map((d) => d.close ?? null); // nullを保持する
+    const actual = result.map((d) => d.close ?? null); // nullを保持する
 
-    if (closes.length === 0) {
+    if (actual.length === 0) {
       return res
         .status(404)
         .json({ error: "株価データが見つかりませんでした" });
@@ -88,17 +87,16 @@ router.post("/predict", async (req, res) => {
     // // → "2024-04-01"
 
     // 簡単な予測：最後の値から毎日+1%の成長
-    const lastPrice = closes[closes.length - 1];
+    const lastPrice = actual[actual.length - 1];
 
-    
     // Flask APIを使った予測
-    const ML_API_URL = process.env.ML_API_URL || 'http://localhost:5000'; 
+    const ML_API_URL = process.env.ML_API_URL || "http://localhost:5000";
 
     let predicted;
     if (model !== "model1") {
       const mlRes = await axios.post(`${ML_API_URL}/predict`, {
         prev_close: lastPrice, // 直近の終値
-        return: 0.01,  // 成長率
+        return: 0.01, // 成長率
         model: model,
       });
       predicted = mlRes.data.predicted;
@@ -108,7 +106,6 @@ router.post("/predict", async (req, res) => {
         Math.round(lastPrice * Math.pow(1.01, i + 1))
       );
     }
-
 
     const predictedDates = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
@@ -147,7 +144,7 @@ router.post("/predict", async (req, res) => {
     await db("histories")
       .insert({
         symbol,
-        actual: closes,
+        actual,
         actualDates,
         predicted,
         predictedDates,
@@ -155,18 +152,20 @@ router.post("/predict", async (req, res) => {
         created_at: new Date(),
         user_id: 1,
         note: "",
+        range,
+        model,
       })
-      .onConflict(["symbol", "user_id"]) // ← ユニーク制約に基づく。symbol と user_id の組み合わせが 既に存在していたら
+      .onConflict(["symbol", "user_id", "range", "model"]) // ← ユニーク制約に基づく。symbol と user_id の組み合わせが 既に存在していたら
       .merge(); // ← 既存なら更新（上書き）、なければ挿入
 
     res.json({
       symbol,
       predicted,
-      actual: closes,
+      actual,
       actualDates,
       predictedDates,
       company,
-      timestamp: new Date(),
+      created_at: new Date(),
     });
   } catch (err) {
     console.error(err);
