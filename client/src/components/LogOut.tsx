@@ -11,7 +11,7 @@ const LogoutButton = () => {
     }
   };
 
-  return <button onClick={handleLogout}>ログアウト</button>;
+  return <button className="modern-btn" onClick={handleLogout}>ログアウト</button>;
 };
 
 export default LogoutButton;

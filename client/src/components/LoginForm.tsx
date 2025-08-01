@@ -20,13 +20,15 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>ログイン</h2>
-      <input placeholder="ユーザー名" value={username} onChange={(e) => setUserName(e.target.value)} />
-      <input type="password" placeholder="パスワード" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={handleLogin}>ログイン</button>
-      <p>
-        ユーザー登録は <Link to="/register">こちら</Link>
+    <div className="card" style={{ maxWidth: 400, margin: '2rem auto' }}>
+      <h2 className="form-title">ログイン</h2>
+      <div className="form-group">
+        <input className="modern-input" placeholder="ユーザー名" value={username} onChange={(e) => setUserName(e.target.value)} />
+        <input className="modern-input" type="password" placeholder="パスワード" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </div>
+      <button className="modern-btn" style={{ width: '100%' }} onClick={handleLogin}>ログイン</button>
+      <p style={{ marginTop: '1.2rem', textAlign: 'center' }}>
+        ユーザー登録は <Link className="form-link" to="/register">こちら</Link>
       </p>
     </div>
   );
