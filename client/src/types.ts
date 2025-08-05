@@ -28,6 +28,20 @@ export type HistoryItem = {
   model: string;
 };
 
+// お気に入り関連の型定義
+export type FavoriteStock = {
+  id: number;
+  symbol: string;
+  name: string;
+  country: string;
+  sector: string;
+  price: string;
+  pe: number;
+  pb: number;
+  dividendYield: number;
+  added_at: string;
+};
+
 // ポートフォリオ関連の型定義
 export type PortfolioStock = {
   id: string;

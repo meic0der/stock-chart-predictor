@@ -8,6 +8,9 @@ const cookieParser = require('cookie-parser');
 const predictRouter = require('./routes/predict');
 const historyRouter = require('./routes/history');
 const authRouter = require('./routes/auth');
+const stocksRouter = require('./routes/stocks');
+const favoritesRouter = require('./routes/favorites');
+const portfolioRouter = require('./routes/portfolio');
 
 const app = express();
 const PORT = process.env.PORT || 4010;
@@ -28,6 +31,9 @@ app.use(express.static(path.join(__dirname, "./public")));
 app.use('/api', predictRouter);
 app.use('/api', historyRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/stocks', stocksRouter);
+app.use('/api/favorites', favoritesRouter);
+app.use('/api/portfolio', portfolioRouter);
 
 // エラーハンドリングミドルウェア
 app.use((err, req, res, next) => {

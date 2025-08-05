@@ -1,77 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { PortfolioData, PortfolioStock } from "../types";
+// import { fetchPortfolioSummary, removeFromPortfolio } from "../services/portfolioApi";
 
 const PortfolioPage: React.FC = () => {
   const navigate = useNavigate();
   
-  // サンプルデータ（実際の実装ではAPIから取得）
   const [portfolioData, setPortfolioData] = useState<PortfolioData>({
-    totalValue: 27427.30,
-    totalInvestment: 23225.00,
-    unrealizedPnL: 4202.30,
-    averageReturn: 18.09,
-    annualDividends: 122.90,
-    portfolioRisk: 3.70,
-    dividendYield: 0.45,
-    lastUpdated: "7/27/2025",
-    stocks: [
-      {
-        id: "1",
-        symbol: "AAPL",
-        name: "Apple Inc.",
-        shares: 50,
-        currentPrice: 175.43,
-        purchasePrice: 150.00,
-        purchaseDate: "2024-01-15",
-        value: 8771.50,
-        weight: 32.0,
-        return: 1271.50,
-        returnPercent: 16.95
-      },
-      {
-        id: "2",
-        symbol: "MSFT",
-        name: "Microsoft Corporation",
-        shares: 30,
-        currentPrice: 378.85,
-        purchasePrice: 320.00,
-        purchaseDate: "2024-02-20",
-        value: 11365.50,
-        weight: 41.4,
-        return: 1765.50,
-        returnPercent: 18.39
-      },
-      {
-        id: "3",
-        symbol: "GOOGL",
-        name: "Alphabet Inc.",
-        shares: 25,
-        currentPrice: 142.56,
-        purchasePrice: 125.00,
-        purchaseDate: "2024-03-10",
-        value: 3564.00,
-        weight: 13.0,
-        return: 439.00,
-        returnPercent: 14.05
-      },
-      {
-        id: "4",
-        symbol: "TSLA",
-        name: "Tesla, Inc.",
-        shares: 20,
-        currentPrice: 186.50,
-        purchasePrice: 165.00,
-        purchaseDate: "2024-04-05",
-        value: 3730.00,
-        weight: 13.6,
-        return: 430.00,
-        returnPercent: 13.03
-      }
-    ]
+    totalValue: 0,
+    totalInvestment: 0,
+    unrealizedPnL: 0,
+    averageReturn: 0,
+    annualDividends: 0,
+    portfolioRisk: 0,
+    dividendYield: 0,
+    lastUpdated: new Date().toLocaleDateString('en-US'),
+    stocks: []
   });
 
   const [showAddStock, setShowAddStock] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadPortfolioData();
+  }, []);
+
+  const loadPortfolioData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      // 一時的にAPIコールをコメントアウト（APIが未実装のため）
+      // const data = await fetchPortfolioSummary();
+      // setPortfolioData(data);
+      
+      // サンプルデータを設定
+      setPortfolioData({
+        totalValue: 27427.30,
+        totalInvestment: 23225.00,
+        unrealizedPnL: 4202.30,
+        averageReturn: 18.09,
+        annualDividends: 122.90,
+        portfolioRisk: 3.70,
+        dividendYield: 0.45,
+        lastUpdated: new Date().toLocaleDateString('en-US'),
+        stocks: [
+          {
+            id: "1",
+            symbol: "AAPL",
+            name: "Apple Inc.",
+            shares: 50,
+            currentPrice: 175.43,
+            purchasePrice: 150.00,
+            purchaseDate: "2024-01-15",
+            value: 8771.50,
+            weight: 32.0,
+            return: 1271.50,
+            returnPercent: 16.95
+          },
+          {
+            id: "2",
+            symbol: "MSFT",
+            name: "Microsoft Corporation",
+            shares: 30,
+            currentPrice: 378.85,
+            purchasePrice: 320.00,
+            purchaseDate: "2024-02-20",
+            value: 11365.50,
+            weight: 41.4,
+            return: 1765.50,
+            returnPercent: 18.39
+          },
+          {
+            id: "3",
+            symbol: "GOOGL",
+            name: "Alphabet Inc.",
+            shares: 25,
+            currentPrice: 142.56,
+            purchasePrice: 125.00,
+            purchaseDate: "2024-03-10",
+            value: 3564.00,
+            weight: 13.0,
+            return: 439.00,
+            returnPercent: 14.05
+          },
+          {
+            id: "4",
+            symbol: "TSLA",
+            name: "Tesla, Inc.",
+            shares: 20,
+            currentPrice: 186.50,
+            purchasePrice: 165.00,
+            purchaseDate: "2024-04-05",
+            value: 3730.00,
+            weight: 13.6,
+            return: 430.00,
+            returnPercent: 13.03
+          }
+        ]
+      });
+    } catch (err) {
+      setError('ポートフォリオデータの読み込みに失敗しました。');
+      console.error('Error loading portfolio data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAddStock = () => {
     setShowAddStock(true);
@@ -81,11 +115,25 @@ const PortfolioPage: React.FC = () => {
     console.log("Edit stock:", id);
   };
 
-  const handleDeleteStock = (id: string) => {
-    setPortfolioData(prev => ({
-      ...prev,
-      stocks: prev.stocks.filter(stock => stock.id !== id)
-    }));
+  const handleDeleteStock = async (symbol: string) => {
+    if (!confirm(`${symbol}をポートフォリオから削除しますか？`)) {
+      return;
+    }
+
+    try {
+      // 一時的にAPIコールをコメントアウト（APIが未実装のため）
+      // const success = await removeFromPortfolio(symbol);
+      // if (success) {
+      //   await loadPortfolioData(); // データを再読み込み
+      //   alert(`${symbol}をポートフォリオから削除しました。`);
+      // } else {
+      //   alert('削除に失敗しました。');
+      // }
+      alert('削除機能は現在開発中です。');
+    } catch (error) {
+      console.error('Error removing from portfolio:', error);
+      alert('エラーが発生しました。');
+    }
   };
 
   const handleStockClick = (symbol: string) => {
