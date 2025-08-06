@@ -87,9 +87,10 @@ class FavoriteController {
       if (!symbol) {
         return res.status(400).json({
           success: false,
-          message: '銘柄コードが必要です。'
+          message: '銘柄コードが必要です。。'
         });
       }
+
 
       const isFavorite = await Favorite.isFavorite(symbol);
       res.json({
