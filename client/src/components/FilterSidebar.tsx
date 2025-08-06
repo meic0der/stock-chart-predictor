@@ -43,27 +43,15 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   return (
     <div className={`filter-sidebar ${isOpen ? 'open' : ''}`}>
       {/* フィルター条件ヘッダー */}
-      <div style={{
-        backgroundColor: '#8b5cf6',
-        color: 'white',
-        padding: '1rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem'
-      }}>
+      <div className="filter-sidebar-header">
         <span style={{ fontSize: '18px' }}>🔍</span>
         <span style={{ fontWeight: 'bold' }}>Filter Criteria</span>
       </div>
 
-      <div style={{ padding: '1.5rem' }}>
+      <div className="filter-sidebar-content">
         {/* 名前検索フィルター */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '0.5rem', 
-            fontWeight: 'bold',
-            color: '#374151'
-          }}>
+        <div className="filter-group">
+          <label className="filter-label">
             Company Name
           </label>
           <input
@@ -71,36 +59,19 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
             placeholder="会社名で検索..."
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '14px'
-            }}
+            className="filter-input"
           />
         </div>
 
         {/* 国フィルター */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '0.5rem', 
-            fontWeight: 'bold',
-            color: '#374151'
-          }}>
+        <div className="filter-group">
+          <label className="filter-label">
             Country
           </label>
           <select 
             value={selectedCountry}
             onChange={(e) => setSelectedCountry(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '14px'
-            }}
+            className="filter-input"
           >
             {availableCountries.map(country => (
               <option key={country} value={country}>{country}</option>
@@ -109,25 +80,14 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         </div>
 
         {/* セクターフィルター */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '0.5rem', 
-            fontWeight: 'bold',
-            color: '#374151'
-          }}>
+        <div className="filter-group">
+          <label className="filter-label">
             Sector
           </label>
           <select 
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '14px'
-            }}
+            className="filter-input"
           >
             <option>All Sectors</option>
             {availableSectors.map(sector => (
@@ -137,50 +97,27 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         </div>
 
         {/* 財務比率セクション */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '1rem', 
-            fontWeight: 'bold',
-            color: '#374151'
-          }}>
+        <div className="filter-group">
+          <label className="filter-label">
             Financial Ratios
           </label>
 
           {/* P/E Ratio */}
           <div style={{ marginBottom: '1rem' }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              marginBottom: '0.5rem' 
-            }}>
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>P/E Ratio</span>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <div className="range-label">P/E Ratio</div>
+            <div className="range-inputs">
               <input
                 type="number"
                 value={peRange.min}
                 onChange={(e) => setPeRange({ ...peRange, min: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Min"
               />
               <input
                 type="number"
                 value={peRange.max}
                 onChange={(e) => setPeRange({ ...peRange, max: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Max"
               />
             </div>
@@ -196,38 +133,20 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
           {/* P/B Ratio */}
           <div style={{ marginBottom: '1rem' }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              marginBottom: '0.5rem' 
-            }}>
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>P/B Ratio</span>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <div className="range-label">P/B Ratio</div>
+            <div className="range-inputs">
               <input
                 type="number"
                 value={pbRange.min}
                 onChange={(e) => setPbRange({ ...pbRange, min: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Min"
               />
               <input
                 type="number"
                 value={pbRange.max}
                 onChange={(e) => setPbRange({ ...pbRange, max: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Max"
               />
             </div>
@@ -243,38 +162,20 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
           {/* ROE */}
           <div style={{ marginBottom: '1rem' }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              marginBottom: '0.5rem' 
-            }}>
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>ROE (Return on Equity)</span>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <div className="range-label">ROE (Return on Equity)</div>
+            <div className="range-inputs">
               <input
                 type="number"
                 value={roeRange.min}
                 onChange={(e) => setRoeRange({ ...roeRange, min: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Min"
               />
               <input
                 type="number"
                 value={roeRange.max}
                 onChange={(e) => setRoeRange({ ...roeRange, max: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Max"
               />
             </div>
@@ -291,38 +192,20 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
           {/* Dividend Yield */}
           <div style={{ marginBottom: '1rem' }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              marginBottom: '0.5rem' 
-            }}>
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Dividend Yield</span>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <div className="range-label">Dividend Yield</div>
+            <div className="range-inputs">
               <input
                 type="number"
                 value={dividendRange.min}
                 onChange={(e) => setDividendRange({ ...dividendRange, min: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Min"
               />
               <input
                 type="number"
                 value={dividendRange.max}
                 onChange={(e) => setDividendRange({ ...dividendRange, max: Number(e.target.value) })}
-                style={{
-                  width: '50%',
-                  padding: '0.5rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px'
-                }}
+                className="range-input"
                 placeholder="Max"
               />
             </div>

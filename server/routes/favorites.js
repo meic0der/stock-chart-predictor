@@ -14,4 +14,7 @@ router.delete('/:symbol', FavoriteController.removeFromFavorites);
 // お気に入りかどうかをチェック
 router.get('/check/:symbol', FavoriteController.checkIsFavorite);
 
+// お気に入り銘柄の最新情報を更新
+router.put('/update-all', FavoriteController.updateAllFavorites);
+
 module.exports = router; 

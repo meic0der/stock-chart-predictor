@@ -60,4 +60,27 @@ export const addFavoriteToPortfolio = async (symbol: string, shares: number, pur
     console.error('Error adding to portfolio:', error);
     return false;
   }
+};
+
+// お気に入り銘柄の最新情報を更新
+export const updateAllFavorites = async (): Promise<{
+  success: boolean;
+  message: string;
+  updatedCount: number;
+  totalCount: number;
+  errors?: string[];
+}> => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/api/favorites/update-all`);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating favorites:', error);
+    return {
+      success: false,
+      message: 'お気に入りの更新に失敗しました。',
+      updatedCount: 0,
+      totalCount: 0,
+      errors: ['更新処理中にエラーが発生しました。']
+    };
+  }
 }; 

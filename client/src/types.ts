@@ -38,8 +38,12 @@ export type FavoriteStock = {
   price: string;
   pe: number;
   pb: number;
+  dividend: number; // 配当金を追加
   dividendYield: number;
   added_at: string;
+  annualReturn?: number;
+  volatility?: number;
+  lastUpdated?: string;
 };
 
 // ポートフォリオ関連の型定義

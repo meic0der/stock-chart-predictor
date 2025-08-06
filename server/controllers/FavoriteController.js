@@ -1,4 +1,5 @@
 const Favorite = require('../models/Favorite');
+const YahooFinanceService = require('../services/YahooFinanceService');
 
 class FavoriteController {
   // お気に入り一覧を取得
@@ -100,6 +101,45 @@ class FavoriteController {
       res.status(500).json({
         success: false,
         message: 'お気に入り状態の確認に失敗しました。'
+      });
+    }
+  }
+
+  // お気に入り銘柄の最新情報を更新
+  static async updateAllFavorites(req, res) {
+    try {
+      const favorites = await Favorite.getAll();
+      const symbols = favorites.map(fav => fav.symbol);
+      
+      if (symbols.length === 0) {
+        return res.json({
+          success: true,
+          message: '更新するお気に入りがありません。',
+          updatedCount: 0
+        });
+      }
+
+      console.log(`Updating ${symbols.length} favorite stocks: ${symbols.join(', ')}`);
+      
+      // YahooFinanceServiceを使用して選択した銘柄を更新
+      const updatedStocks = await YahooFinanceService.updateSelectedStocks(symbols);
+      
+      const updatedCount = updatedStocks.length;
+      const errors = symbols.length - updatedCount > 0 ? 
+        [`${symbols.length - updatedCount}件の銘柄で更新に失敗しました`] : [];
+
+      res.json({
+        success: true,
+        message: `${updatedCount}件のお気に入りを更新しました。`,
+        updatedCount,
+        totalCount: symbols.length,
+        errors: errors.length > 0 ? errors : undefined
+      });
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+      res.status(500).json({
+        success: false,
+        message: 'お気に入りの更新に失敗しました。'
       });
     }
   }

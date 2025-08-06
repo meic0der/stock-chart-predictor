@@ -6,6 +6,7 @@ interface StockData {
   price: string;
   pe: number;
   pb: number;
+  dividend: number; // 配当金を追加
   dividendYield: number;
   lastUpdated?: string;
   annualReturn?: number;

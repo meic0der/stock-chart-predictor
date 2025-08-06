@@ -249,6 +249,7 @@ const fetchStockData = async (symbol) => {
       rawPrice: quote.regularMarketPrice,
       pe: quote.trailingPE || 0,
       pb: quote.priceToBook || 0,
+      dividend: quote.trailingAnnualDividendRate || 0, // 配当金を追加
       dividendYield: quote.trailingAnnualDividendYield ? quote.trailingAnnualDividendYield * 100 : 0,
       marketCap: quote.marketCap || 0,
       volume: quote.volume || 0,
@@ -307,6 +308,7 @@ const fetchMultipleStockData = async () => {
         raw_price: stockData.rawPrice,
         pe_ratio: stockData.pe,
         pb_ratio: stockData.pb,
+        dividend: stockData.dividend, // 配当金を追加
         dividend_yield: stockData.dividendYield,
         market_cap: stockData.marketCap,
         volume: stockData.volume,
@@ -329,6 +331,7 @@ const fetchMultipleStockData = async () => {
     rawPrice: stock.raw_price,
     pe: stock.pe_ratio,
     pb: stock.pb_ratio,
+    dividend: stock.dividend ? parseFloat(stock.dividend) : 0, // 配当金を数値に変換
     dividendYield: stock.dividend_yield,
     marketCap: stock.market_cap,
     volume: stock.volume,
@@ -354,6 +357,7 @@ const fetchFilteredStockData = async (filters = {}) => {
     rawPrice: stock.raw_price,
     pe: stock.pe_ratio,
     pb: stock.pb_ratio,
+    dividend: stock.dividend ? parseFloat(stock.dividend) : 0, // 配当金を数値に変換
     dividendYield: stock.dividend_yield,
     marketCap: stock.market_cap,
     volume: stock.volume,
@@ -397,6 +401,7 @@ const updateSelectedStocks = async (symbols) => {
       raw_price: stockData.rawPrice,
       pe_ratio: stockData.pe,
       pb_ratio: stockData.pb,
+      dividend: stockData.dividend, // 配当金を追加
       dividend_yield: stockData.dividendYield,
       market_cap: stockData.marketCap,
       volume: stockData.volume,

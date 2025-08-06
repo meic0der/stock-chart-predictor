@@ -2,7 +2,7 @@ const db = require('../db');
 
 class Favorite {
   static async getAll() {
-    return await db('favorites')
+    const favorites = await db('favorites')
       .join('stocks', 'favorites.symbol', 'stocks.symbol')
       .select(
         'favorites.id',
@@ -13,10 +13,25 @@ class Favorite {
         'stocks.price',
         'stocks.pe_ratio as pe',
         'stocks.pb_ratio as pb',
+        'stocks.dividend as dividend',
         'stocks.dividend_yield as dividendYield',
+        'stocks.annual_return as annualReturn',
+        'stocks.volatility as volatility',
+        'stocks.last_updated as lastUpdated',
         'favorites.added_at'
       )
       .orderBy('favorites.added_at', 'desc');
+
+    // 数値フィールドを適切に変換
+    return favorites.map(favorite => ({
+      ...favorite,
+      pe: favorite.pe ? parseFloat(favorite.pe) : null,
+      pb: favorite.pb ? parseFloat(favorite.pb) : null,
+      dividend: favorite.dividend ? parseFloat(favorite.dividend) : null,
+      dividendYield: favorite.dividendYield ? parseFloat(favorite.dividendYield) : null,
+      annualReturn: favorite.annualReturn ? parseFloat(favorite.annualReturn) : null,
+      volatility: favorite.volatility ? parseFloat(favorite.volatility) : null
+    }));
   }
 
   static async getBySymbol(symbol) {
